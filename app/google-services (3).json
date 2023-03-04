@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "350466944348",
+    "project_id": "trycalendarshare",
+    "storage_bucket": "trycalendarshare.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350466944348:android:83131b573a4c7009a62599",
+        "android_client_info": {
+          "package_name": "com.example.trycalendar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350466944348-0qfo31v1bqsiifg6n7cbeji806rtvge4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.trycalendar",
+            "certificate_hash": "a9302dfc4a720b21879585edb8be13daf580e9bc"
+          }
+        },
+        {
+          "client_id": "350466944348-61r05r8ndf5h13nsfd8kblol37a0i43b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFfNq-Y7wDSuTGxBggRGOYgc4a_7On640"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "350466944348-61r05r8ndf5h13nsfd8kblol37a0i43b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
