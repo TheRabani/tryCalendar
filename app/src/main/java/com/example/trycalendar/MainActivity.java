@@ -94,11 +94,10 @@ public class MainActivity extends AppCompatActivity implements SelectListener {
 
                 } else {
                     if (!isSaturday) {
-                        databaseReference.child("10:00").setValue(0);
-                        databaseReference.child("12:00").setValue(0);
-                        databaseReference.child("08:00").setValue(0);
-                    }
-                    else
+                        databaseReference.child("10:00").setValue(12);
+                        databaseReference.child("12:00").setValue(12);
+                        databaseReference.child("08:00").setValue(12);
+                    } else
                         Toast.makeText(MainActivity.this, "המטווח אינו פעיל בשבת", Toast.LENGTH_SHORT).show();
                 }
                 adapter.notifyDataSetChanged();
@@ -203,20 +202,25 @@ public class MainActivity extends AppCompatActivity implements SelectListener {
 
     @Override
     public void onItemClicked(Schedule schedule) {
-        Toast.makeText(this, "" + schedule, Toast.LENGTH_SHORT).show();
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        View dialogView = getLayoutInflater().inflate(R.layout.dialog_save_spot, null, false);
-        builder.setView(dialogView);
-        AlertDialog ad = builder.create();
-        Button btnYes = dialogView.findViewById(R.id.buttonYes);
-        Button btnNo = dialogView.findViewById(R.id.buttonNo);
+        if (schedule.getPeople() != 0) {
+            Toast.makeText(this, "" + schedule, Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            View dialogView = getLayoutInflater().inflate(R.layout.dialog_save_spot, null, false);
+            builder.setView(dialogView);
+            AlertDialog ad = builder.create();
+            Button btnYes = dialogView.findViewById(R.id.buttonYes);
+            Button btnNo = dialogView.findViewById(R.id.buttonNo);
 
-        btnYes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                
-            }
-        });
-        ad.show();
+            btnYes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    databaseReference.child("" + schedule.getHour()).setValue(schedule.getPeople() - 1);
+                    ad.dismiss();
+                }
+            });
+            btnNo.setOnClickListener(view -> ad.dismiss());
+            ad.show();
+        } else
+            Toast.makeText(MainActivity.this, "אין עוד מקומות פנויים", Toast.LENGTH_SHORT).show();
     }
 }
