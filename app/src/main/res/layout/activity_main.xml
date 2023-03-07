@@ -13,53 +13,40 @@
         android:id="@+id/date_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-
-        android:layout_marginTop="8dp"
-        android:text="Set The Date"
+        android:layout_marginTop="-35dp"
+        android:text="בחר תאריך"
+        android:textColor="@color/black"
+        android:textSize="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/calendar" />
     <!--    android:layout_marginTop="20dp" android:layout_gravity="center"-->
 
     <CalendarView
         android:id="@+id/calendar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
 
         android:backgroundTint="@color/design_default_color_on_primary"
         android:theme="@style/CardView.Light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_view" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/confirm_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-30dp"
-        android:backgroundTint="@color/blue"
-        android:onClick="buttonConfirm"
-
-        android:text="confirm"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/normal_rec"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="10dp"
+        android:layout_marginTop="12dp"
         android:scrollbars="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirm_button" />
+        app:layout_constraintTop_toBottomOf="@+id/date_view" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -72,152 +59,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirm_button" />
-
-    <!--    <Button-->
-    <!--        android:id="@+id/button4"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:text="Button" />-->
-
-    <!--    <LinearLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginTop="20dp"-->
-    <!--        android:layout_marginBottom="20dp"-->
-    <!--        android:orientation="horizontal">-->
-
-    <!--        <Button-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:background="@null"-->
-    <!--            android:onClick="previousMonthAction"-->
-    <!--            android:text="-"-->
-    <!--            android:textColor="@color/blue"-->
-    <!--            android:textSize="20sp"-->
-    <!--            android:textStyle="bold" />-->
-
-    <!--        <TextView-->
-    <!--            android:id="@+id/monthYearTV"-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_weight="2"-->
-    <!--            android:text="Feb 2021"-->
-    <!--            android:textAlignment="center"-->
-    <!--            android:textColor="@color/black"-->
-    <!--            android:textSize="20sp" />-->
-
-    <!--        <Button-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:background="@null"-->
-    <!--            android:onClick="nextMonthAction"-->
-    <!--            android:text="-"-->
-    <!--            android:textColor="@color/blue"-->
-    <!--            android:textSize="20sp"-->
-    <!--            android:textStyle="bold" />-->
-
-    <!--    </LinearLayout>-->
-
-    <!--    <LinearLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:orientation="horizontal">-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:text="SUN"-->
-    <!--            android:textAlignment="center"-->
-    <!--            android:textColor="@color/gray"-->
-    <!--            android:textSize="16sp" />-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:text="MON"-->
-    <!--            android:textAlignment="center"-->
-    <!--            android:textColor="@color/gray"-->
-    <!--            android:textSize="16sp" />-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:text="TUE"-->
-    <!--            android:textAlignment="center"-->
-    <!--            android:textColor="@color/gray"-->
-    <!--            android:textSize="16sp" />-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:text="WED"-->
-    <!--            android:textAlignment="center"-->
-    <!--            android:textColor="@color/gray"-->
-    <!--            android:textSize="16sp" />-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:text="THUR"-->
-    <!--            android:textAlignment="center"-->
-    <!--            android:textColor="@color/gray"-->
-    <!--            android:textSize="16sp" />-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:text="FRI"-->
-    <!--            android:textAlignment="center"-->
-    <!--            android:textColor="@color/gray"-->
-    <!--            android:textSize="16sp" />-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="0dp"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:layout_weight="1"-->
-    <!--            android:text="SAT"-->
-    <!--            android:textAlignment="center"-->
-    <!--            android:textColor="@color/gray"-->
-    <!--            android:textSize="16sp" />-->
-
-
-    <!--    </LinearLayout>-->
-
-
-    <!--    <androidx.recyclerview.widget.RecyclerView-->
-    <!--        android:id="@+id/calendarRecyclerView"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent" />-->
-
+        app:layout_constraintTop_toBottomOf="@+id/date_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--    <TextView android:id="@+id/textView"-->
-    <!--    android:layout_width="wrap_content"-->
-    <!--    android:layout_height="wrap_content"-->
-    <!--    android:text="Hello World!"-->
-    <!--    app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--    app:layout_constraintEnd_toEndOf="parent"-->
-    <!--    app:layout_constraintStart_toStartOf="parent"-->
-    <!--    app:layout_constraintTop_toTopOf="parent"-->
-    <!--    app:layout_constraintVertical_bias="0.11" />-->
-
-    <!--<Button-->
-    <!--android:id="@+id/datePicker"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginTop="80dp"-->
-    <!--android:text="open up"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintHorizontal_bias="0.498"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/textView" />-->

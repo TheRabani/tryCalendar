@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,8 @@ import android.widget.CalendarView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.datatransport.runtime.dagger.multibindings.ElementsIntoSet;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,10 +32,17 @@ public class MainActivity extends AppCompatActivity implements SelectListener {
     TextView editText;
     DatabaseReference databaseReference;
     String date;
+    String simpleDate = "";
     ArrayList<Schedule> arrayList;
     RecyclerView normal_rec;
     private ScheduleAdapter adapter;
     private ArrayList<Schedule> scheduleArrayList;
+
+    RecyclerView recyclerView;
+    FloatingActionButton add_button;
+    MyDatabaseHelper myDB;
+    ArrayList<String> book_id, book_date, book_time;
+    CustomAdapterSQLite customAdapterSQLite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +60,9 @@ public class MainActivity extends AppCompatActivity implements SelectListener {
         calendar = (CalendarView) findViewById(R.id.calendar);
         editText = (TextView) findViewById(R.id.date_view);
 
+        storeDataInArrays();
+        customAdapterSQLite = new CustomAdapterSQLite(MainActivity.this, book_id, book_date, book_time);
+
         Long currentTime = System.currentTimeMillis();
 //        calendar.setMinDate(currentTime);
 //        calendar.setDate(currentTime);
@@ -61,7 +74,8 @@ public class MainActivity extends AppCompatActivity implements SelectListener {
 
                 date = dayOfMonth + "-" + (month + 1) + "-" + year;
                 databaseReference = FirebaseDatabase.getInstance().getReference("Calendar").child(date);
-                editText.setText(date);
+                editText.setText("אימונים בתאריך: " + date);
+                simpleDate = "D" + dayOfMonth + "M" + (month + 1) + "Y" + year;
                 calendarClicked(isSaturday(dayOfMonth, month, year));
             }
         });
@@ -137,29 +151,36 @@ public class MainActivity extends AppCompatActivity implements SelectListener {
 //        Toast.makeText(this, "success", Toast.LENGTH_SHORT).show();
 //    }
     public void buttonConfirm(View view) {
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.getValue() != null) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_save_spot, null, false);
+        builder.setView(dialogView);
+        AlertDialog ad = builder.create();
+        Button btnYes = dialogView.findViewById(R.id.buttonYes);
+        Button btnNo = dialogView.findViewById(R.id.buttonNo);
 
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        Schedule schedule = new Schedule(dataSnapshot.getKey(), Integer.parseInt(dataSnapshot.getValue().toString()));
-                        scheduleArrayList.add(schedule);
-
-//                        Toast.makeText(MainActivity.this, ""+schedule, Toast.LENGTH_SHORT).show();
-//                        Toast.makeText(MainActivity.this, ""+dataSnapshot.getKey(), Toast.LENGTH_SHORT).show();
-//                        Toast.makeText(MainActivity.this, ""+dataSnapshot.getValue(), Toast.LENGTH_SHORT).show();
-                    }
-                    adapter.notifyDataSetChanged();
-                } else
-                    Toast.makeText(MainActivity.this, "error in getting data", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainActivity.this, "error- canceled. try again", Toast.LENGTH_SHORT).show();
-            }
-        });
+        //        databaseReference.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.getValue() != null) {
+//
+//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                        Schedule schedule = new Schedule(dataSnapshot.getKey(), Integer.parseInt(dataSnapshot.getValue().toString()));
+//                        scheduleArrayList.add(schedule);
+//
+////                        Toast.makeText(MainActivity.this, ""+schedule, Toast.LENGTH_SHORT).show();
+////                        Toast.makeText(MainActivity.this, ""+dataSnapshot.getKey(), Toast.LENGTH_SHORT).show();
+////                        Toast.makeText(MainActivity.this, ""+dataSnapshot.getValue(), Toast.LENGTH_SHORT).show();
+//                    }
+//                    adapter.notifyDataSetChanged();
+//                } else
+//                    Toast.makeText(MainActivity.this, "error in getting data", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Toast.makeText(MainActivity.this, "error- canceled. try again", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
     }
 
@@ -203,24 +224,60 @@ public class MainActivity extends AppCompatActivity implements SelectListener {
     @Override
     public void onItemClicked(Schedule schedule) {
         if (schedule.getPeople() != 0) {
-            Toast.makeText(this, "" + schedule, Toast.LENGTH_SHORT).show();
-            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-            View dialogView = getLayoutInflater().inflate(R.layout.dialog_save_spot, null, false);
-            builder.setView(dialogView);
-            AlertDialog ad = builder.create();
-            Button btnYes = dialogView.findViewById(R.id.buttonYes);
-            Button btnNo = dialogView.findViewById(R.id.buttonNo);
+            if (isAvailable()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_save_spot, null, false);
+                builder.setView(dialogView);
+                AlertDialog ad = builder.create();
+                ad.setCancelable(false);
+                Button btnYes = dialogView.findViewById(R.id.buttonYes);
+                Button btnNo = dialogView.findViewById(R.id.buttonNo);
+                TextView textView = dialogView.findViewById(R.id.textView);
+                textView.setText("להירשם לאימון בתאריך" + "\n" + date + " " + "בשעה" + " " + schedule.getHour() + "?");
 
-            btnYes.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    databaseReference.child("" + schedule.getHour()).setValue(schedule.getPeople() - 1);
-                    ad.dismiss();
-                }
-            });
-            btnNo.setOnClickListener(view -> ad.dismiss());
-            ad.show();
+                btnYes.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        MyDatabaseHelper myDB = new MyDatabaseHelper(MainActivity.this);
+                        myDB.addBook(simpleDate.trim(), schedule.getHour().trim());
+                        storeDataInArrays();
+                        databaseReference.child("" + schedule.getHour()).setValue(schedule.getPeople() - 1);
+                        ad.dismiss();
+                    }
+                });
+                btnNo.setOnClickListener(view -> ad.dismiss());
+                ad.show();
+            } else
+                Toast.makeText(MainActivity.this, "כבר קבעת אימון לחודש הזה", Toast.LENGTH_SHORT).show();
         } else
             Toast.makeText(MainActivity.this, "אין עוד מקומות פנויים", Toast.LENGTH_SHORT).show();
+    }
+
+    void storeDataInArrays() {
+        myDB = new MyDatabaseHelper(MainActivity.this);
+        book_time = new ArrayList<>();
+        book_id = new ArrayList<>();
+        book_date = new ArrayList<>();
+        Cursor cursor = myDB.readAllData();
+        if (cursor.getCount() == 0)
+            Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
+        else
+            while (cursor.moveToNext()) {
+                book_id.add(cursor.getString(0));
+                book_date.add(cursor.getString(1));
+                book_time.add(cursor.getString(2));
+            }
+    }
+
+    public boolean isAvailable() {
+        if (book_date == null || book_date.size() == 0)
+            return true;
+        String st = simpleDate.substring(simpleDate.indexOf("M") + 1, simpleDate.indexOf("Y"));
+        for (String s : book_date) {
+            String temp = s.substring(s.indexOf("M") + 1, s.indexOf("Y"));
+            if (temp.equals(st))
+                return false;
+        }
+        return true;
     }
 }
