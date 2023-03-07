@@ -14,8 +14,6 @@ import android.widget.CalendarView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.datatransport.runtime.dagger.multibindings.ElementsIntoSet;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,13 +31,10 @@ public class MainActivity extends AppCompatActivity implements SelectListener {
     DatabaseReference databaseReference;
     String date;
     String simpleDate = "";
-    ArrayList<Schedule> arrayList;
     RecyclerView normal_rec;
-    private ScheduleAdapter adapter;
+    private ScheduleAdapter scheduleAdapter;
     private ArrayList<Schedule> scheduleArrayList;
 
-    RecyclerView recyclerView;
-    FloatingActionButton add_button;
     MyDatabaseHelper myDB;
     ArrayList<String> book_id, book_date, book_time;
     CustomAdapterSQLite customAdapterSQLite;
@@ -52,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements SelectListener {
         normal_rec = findViewById(R.id.normal_rec);
         normal_rec.setLayoutManager(new LinearLayoutManager(this));
         scheduleArrayList = new ArrayList<>();
-        adapter = new ScheduleAdapter(this, scheduleArrayList, this);
-        normal_rec.setAdapter(adapter);
+        scheduleAdapter = new ScheduleAdapter(this, scheduleArrayList, this);
+        normal_rec.setAdapter(scheduleAdapter);
 //        normal_rec.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 //        createListData();
 
@@ -114,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements SelectListener {
                     } else
                         Toast.makeText(MainActivity.this, "המטווח אינו פעיל בשבת", Toast.LENGTH_SHORT).show();
                 }
-                adapter.notifyDataSetChanged();
+                scheduleAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -122,27 +117,6 @@ public class MainActivity extends AppCompatActivity implements SelectListener {
                 Toast.makeText(MainActivity.this, "error- canceled. try again", Toast.LENGTH_SHORT).show();
             }
         });
-//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                scheduleArrayList.clear();
-//                if(snapshot.getValue() != null) {
-////                    Toast.makeText(MainActivity.this, "exist", Toast.LENGTH_SHORT).show();
-//
-//
-//                }
-//                else {
-//                    scheduleArrayList.clear();
-//                    adapter.notifyDataSetChanged();
-//                }
-////                    Toast.makeText(MainActivity.this, "nope", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
     }
 
     //    public void buttonSaveEvent(View view) {

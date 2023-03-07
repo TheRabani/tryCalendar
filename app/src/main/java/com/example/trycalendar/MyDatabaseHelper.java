@@ -52,7 +52,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
         if(result == -1)
             Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
         else
-            Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Success- added", Toast.LENGTH_SHORT).show();
     }
 
     Cursor readAllData(){
